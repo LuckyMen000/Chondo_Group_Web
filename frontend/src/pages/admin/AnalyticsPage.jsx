@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { geoNaturalEarth1, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
 import { SiGoogleanalytics, SiMeta } from "react-icons/si";
@@ -199,7 +199,10 @@ function getMaxValue(items) {
     return 1;
   }
 
-  return Math.max(...items.map((item) => item.value || item.visits || 0), 1);
+  return Math.max(
+    ...items.map((item) => item.value || item.visits || 0),
+    1
+  );
 }
 
 function getPercent(value, max) {
@@ -229,10 +232,14 @@ function AnalyticsMetricList({ title, icon, items, emptyText }) {
       ) : (
         <div className="analytics-metric-list">
           {items.map((item) => (
-            <div className="analytics-metric-item" key={`${title}-${item.name}`}>
+            <div
+              className="analytics-metric-item"
+              key={`${title}-${item.name}`}
+            >
               <div className="analytics-metric-top">
                 <span>
                   {item.name}
+
                   {item.code && item.code !== "UNKNOWN" ? (
                     <small> {item.code}</small>
                   ) : null}
@@ -308,6 +315,7 @@ function AnalyticsPage() {
 
     summary.countries.forEach((country) => {
       const code = country.code?.toUpperCase?.() || "";
+
       const mapId =
         COUNTRY_CODE_TO_MAP_ID[code] ||
         COUNTRY_NAME_TO_MAP_ID[country.name] ||
@@ -325,6 +333,11 @@ function AnalyticsPage() {
     async function loadMap() {
       try {
         const response = await fetch(WORLD_MAP_URL);
+
+        if (!response.ok) {
+          throw new Error("Не удалось загрузить карту мира");
+        }
+
         const worldData = await response.json();
 
         const countriesData = feature(
@@ -341,9 +354,12 @@ function AnalyticsPage() {
     loadMap();
   }, []);
 
-  async function loadAnalytics() {
+  const loadAnalytics = useCallback(async () => {
     setLoading(true);
-    setMessage({ type: "", text: "" });
+    setMessage({
+      type: "",
+      text: ""
+    });
 
     try {
       const params = {
@@ -368,23 +384,49 @@ function AnalyticsPage() {
     } catch (error) {
       setMessage({
         type: "error",
-        text: error.message
+        text:
+          error instanceof Error
+            ? error.message
+            : "Не удалось загрузить аналитику"
       });
     } finally {
       setLoading(false);
     }
-  }
+  }, [period, dateFrom, dateTo]);
 
   useEffect(() => {
-    if (period === "custom" && (!dateFrom || !dateTo)) {
+    if (period === "custom") {
+      setLoading(false);
       return;
     }
 
     loadAnalytics();
-  }, [period]);
+  }, [period, loadAnalytics]);
 
   function handleApplyCustomPeriod() {
     if (!dateFrom || !dateTo) {
+      setMessage({
+        type: "error",
+        text: "Выберите дату начала и дату окончания"
+      });
+
+      return;
+    }
+
+    if (dateFrom > dateTo) {
+      setMessage({
+        type: "error",
+        text: "Дата начала не может быть позже даты окончания"
+      });
+
+      return;
+    }
+
+    loadAnalytics();
+  }
+
+  function handleRefresh() {
+    if (period === "custom" && (!dateFrom || !dateTo)) {
       setMessage({
         type: "error",
         text: "Выберите дату начала и дату окончания"
@@ -448,9 +490,17 @@ function AnalyticsPage() {
 
     const percent = countryValue / countryMax;
 
-    if (percent >= 0.8) return 1;
-    if (percent >= 0.5) return 0.85;
-    if (percent >= 0.25) return 0.7;
+    if (percent >= 0.8) {
+      return 1;
+    }
+
+    if (percent >= 0.5) {
+      return 0.85;
+    }
+
+    if (percent >= 0.25) {
+      return 0.7;
+    }
 
     return 0.55;
   }
@@ -467,6 +517,7 @@ function AnalyticsPage() {
         <div className="analytics-header">
           <div>
             <h2>Аналитика посещений</h2>
+
             <p>
               Карта мира, страны, источники трафика, браузеры и динамика
               посещений сайта.
@@ -476,16 +527,19 @@ function AnalyticsPage() {
           <button
             className="button analytics-refresh-button"
             type="button"
-            onClick={loadAnalytics}
+            onClick={handleRefresh}
             disabled={loading}
           >
             <FiRefreshCw />
+
             {loading ? "Обновление..." : "Обновить"}
           </button>
         </div>
 
         {message.text && (
-          <p className={`form-message ${message.type}`}>{message.text}</p>
+          <p className={`form-message ${message.type}`}>
+            {message.text}
+          </p>
         )}
 
         <div className="analytics-periods">
@@ -507,6 +561,7 @@ function AnalyticsPage() {
           <div className="analytics-custom-period">
             <label>
               С даты
+
               <input
                 type="date"
                 value={dateFrom}
@@ -516,6 +571,7 @@ function AnalyticsPage() {
 
             <label>
               По дату
+
               <input
                 type="date"
                 value={dateTo}
@@ -574,7 +630,9 @@ function AnalyticsPage() {
 
         <div className="analytics-main-grid">
           <div
-            className={`analytics-map-wrapper ${dragging ? "dragging" : ""}`}
+            className={`analytics-map-wrapper ${
+              dragging ? "dragging" : ""
+            }`}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -591,7 +649,11 @@ function AnalyticsPage() {
                 +
               </button>
 
-              <button type="button" className="map-reset" onClick={resetZoom}>
+              <button
+                type="button"
+                className="map-reset"
+                onClick={resetZoom}
+              >
                 Сбросить
               </button>
             </div>
@@ -637,17 +699,26 @@ function AnalyticsPage() {
           </div>
 
           <div className="analytics-services">
-            <button type="button" className="analytics-service-button">
+            <button
+              type="button"
+              className="analytics-service-button"
+            >
               <SiGoogleanalytics />
               <span>Google Аналитика</span>
             </button>
 
-            <button type="button" className="analytics-service-button">
+            <button
+              type="button"
+              className="analytics-service-button"
+            >
               <span className="yandex-icon">Я</span>
               <span>Яндекс Метрика</span>
             </button>
 
-            <button type="button" className="analytics-service-button">
+            <button
+              type="button"
+              className="analytics-service-button"
+            >
               <SiMeta />
               <span>Facebook Pixel</span>
             </button>
@@ -663,6 +734,7 @@ function AnalyticsPage() {
                 type="button"
                 className="traffic-help-button"
                 onClick={() => setShowTrafficHint((prev) => !prev)}
+                aria-label="Информация об источниках трафика"
               >
                 <FiHelpCircle />
               </button>
@@ -670,16 +742,17 @@ function AnalyticsPage() {
 
             {showTrafficHint && (
               <div className="traffic-tooltip">
-                Показывает, с каких сайтов или платформ приходит больше всего
-                трафика: Direct, Instagram, Facebook, Discord, TikTok,
-                WhatsApp, Viber, VK, LinkedIn, Google, Яндекс и другие.
+                Показывает, с каких сайтов или платформ приходит больше
+                всего трафика: Direct, Instagram, Facebook, Discord,
+                TikTok, WhatsApp, Viber, VK, LinkedIn, Google, Яндекс и
+                другие.
               </div>
             )}
           </div>
 
           <p>
-            Direct — если пользователь зашёл напрямую по ссылке. Остальные
-            источники определяются по referrer и UTM-меткам.
+            Direct — если пользователь зашёл напрямую по ссылке.
+            Остальные источники определяются по referrer и UTM-меткам.
           </p>
         </div>
 
@@ -703,7 +776,10 @@ function AnalyticsPage() {
                         <div
                           className="analytics-day-bar visits"
                           style={{
-                            height: `${getPercent(day.visits, dailyMax)}%`
+                            height: `${getPercent(
+                              day.visits,
+                              dailyMax
+                            )}%`
                           }}
                           title={`Посещения: ${day.visits}`}
                         />

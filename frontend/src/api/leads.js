@@ -1,4 +1,4 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
+import { API_URL } from "./config";
 
 
 export async function createLead(data) {
@@ -11,7 +11,8 @@ export async function createLead(data) {
   });
 
   if (!response.ok) {
-    throw new Error("Ошибка при отправке заявки");
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.detail || "Ошибка при отправке заявки");
   }
 
   return await response.json();

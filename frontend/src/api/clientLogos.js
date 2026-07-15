@@ -1,8 +1,13 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
+import { API_URL } from "./config";
 
 
 export async function getClientLogos() {
-  const response = await fetch(`${API_URL}/client-logos/`);
+  const response = await fetch(`${API_URL}/client-logos/`, {
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-cache"
+    }
+  });
 
   if (!response.ok) {
     throw new Error("Ошибка при получении логотипов");

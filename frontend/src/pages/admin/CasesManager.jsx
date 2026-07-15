@@ -24,15 +24,23 @@ const caseCategories = [
   },
   {
     id: "digital",
-    title: "Digital реклама"
+    title: "Digital Marketing"
   },
   {
     id: "experts",
-    title: "Продюсирование экспертов + системные воронки"
+    title: "Продвижение экспертов"
+  },
+  {
+    id: "funnels",
+    title: "Автоворонки"
+  },
+  {
+    id: "uxui",
+    title: "UX/UI"
   },
   {
     id: "podcasts",
-    title: "Подкасты"
+    title: "Видеопродакшн и подкасты"
   }
 ];
 
@@ -270,7 +278,7 @@ function CasesManager({ onBack }) {
             Название кейса
             <input
               type="text"
-              placeholder="Например: MONOCHROME"
+              placeholder="Например: Медицинский проект — автоматизация заявок"
               value={form.title}
               onChange={(event) => updateForm("title", event.target.value)}
             />
@@ -280,7 +288,7 @@ function CasesManager({ onBack }) {
             Подзаголовок
             <input
               type="text"
-              placeholder="дизайн и разработка"
+              placeholder="Краткий результат или выполненные работы"
               value={form.subtitle}
               onChange={(event) => updateForm("subtitle", event.target.value)}
             />
@@ -332,7 +340,7 @@ function CasesManager({ onBack }) {
           <label className="case-editor-full">
             Описание
             <textarea
-              placeholder="Кратко опиши, что было сделано в кейсе"
+              placeholder="Задача, решение и измеримый результат проекта"
               value={form.description}
               onChange={(event) => updateForm("description", event.target.value)}
             />

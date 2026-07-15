@@ -47,7 +47,6 @@ class TokenResponse(BaseModel):
 
 class LeadCreate(BaseModel):
     name: str
-    email: EmailStr
     phone: str
     message: Optional[str] = None
 
@@ -55,7 +54,6 @@ class LeadCreate(BaseModel):
 class LeadResponse(BaseModel):
     id: int
     name: str
-    email: EmailStr
     phone: str
     message: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -243,6 +241,20 @@ class ProjectCaseResponse(BaseModel):
     cloud_public_id: Optional[str] = None
     sort_order: int
     is_active: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+class FooterSettingsUpdate(BaseModel):
+    instagram_url: Optional[str] = None
+    telegram_url: Optional[str] = None
+    whatsapp_url: Optional[str] = None
+
+
+class FooterSettingsResponse(FooterSettingsUpdate):
+    id: int
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 

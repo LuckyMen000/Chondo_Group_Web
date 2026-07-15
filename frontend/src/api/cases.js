@@ -1,8 +1,14 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api";
+import { API_URL } from "./config";
 
 
-export async function getCases() {
-  const response = await fetch(`${API_URL}/cases/`);
+export async function getCases({ signal } = {}) {
+  const response = await fetch(`${API_URL}/cases/`, {
+    signal,
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-cache"
+    }
+  });
 
   if (!response.ok) {
     throw new Error("Ошибка при получении кейсов");

@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import cloudinary
 import cloudinary.uploader
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -25,6 +25,8 @@ ALLOWED_CATEGORIES = [
     "development",
     "digital",
     "experts",
+    "funnels",
+    "uxui",
     "podcasts"
 ]
 
@@ -73,11 +75,14 @@ def validate_image(file: UploadFile):
 
 
 @router.get("/", response_model=List[ProjectCaseResponse])
-def get_public_cases(db: Session = Depends(get_db)):
+def get_public_cases(response: Response, db: Session = Depends(get_db)):
     """
     Публичный endpoint для сайта.
     Возвращает только опубликованные кейсы.
     """
+
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
 
     cases = (
         db.query(ProjectCase)

@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import cloudinary
 import cloudinary.uploader
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -48,7 +48,10 @@ def make_slug(value: str) -> str:
 
 
 @router.get("/", response_model=List[ClientLogoResponse])
-def get_public_client_logos(db: Session = Depends(get_db)):
+def get_public_client_logos(response: Response, db: Session = Depends(get_db)):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+
     logos = (
         db.query(ClientLogo)
         .filter(ClientLogo.is_active == True)

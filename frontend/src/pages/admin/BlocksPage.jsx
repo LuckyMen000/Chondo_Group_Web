@@ -7,6 +7,7 @@ import {
   FiImage,
   FiInfo,
   FiLayers,
+  FiLink,
   FiPhone,
   FiRefreshCw,
   FiSave,
@@ -21,6 +22,11 @@ import {
   updateClientLogo,
   uploadClientLogo
 } from "../../api/clientLogos";
+
+import {
+  getAdminFooterSettings,
+  updateAdminFooterSettings
+} from "../../api/footer";
 
 import CasesManager from "./CasesManager";
 
@@ -39,6 +45,13 @@ const blocks = [
     description:
       "Управление контактной информацией сайта: телефон, почта, адрес и ссылки.",
     icon: FiPhone
+  },
+  {
+    id: "footer",
+    title: "Футер",
+    description:
+      "Ссылки Instagram, Telegram и WhatsApp в нижней части сайта.",
+    icon: FiLink
   },
   {
     id: "services",
@@ -404,6 +417,158 @@ function ClientLogosBlock({ onBack }) {
 }
 
 
+function FooterSettingsBlock({ onBack }) {
+  const [form, setForm] = useState({
+    instagram_url: "",
+    telegram_url: "",
+    whatsapp_url: ""
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const token = getToken();
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSettings() {
+      try {
+        setLoading(true);
+        setMessage("");
+
+        const data = await getAdminFooterSettings(token);
+        if (!active) return;
+
+        setForm({
+          instagram_url: data?.instagram_url || "",
+          telegram_url: data?.telegram_url || "",
+          whatsapp_url: data?.whatsapp_url || ""
+        });
+      } catch (error) {
+        if (active) {
+          setMessage(error.message || "Не удалось загрузить настройки футера");
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+
+    loadSettings();
+    return () => {
+      active = false;
+    };
+  }, [token]);
+
+  function changeField(field, value) {
+    setForm((current) => ({
+      ...current,
+      [field]: value
+    }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    try {
+      setSaving(true);
+      setMessage("");
+
+      const saved = await updateAdminFooterSettings(token, form);
+      setForm({
+        instagram_url: saved?.instagram_url || "",
+        telegram_url: saved?.telegram_url || "",
+        whatsapp_url: saved?.whatsapp_url || ""
+      });
+      setMessage("Ссылки футера сохранены и уже доступны на сайте");
+    } catch (error) {
+      setMessage(error.message || "Не удалось сохранить ссылки футера");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <section className="admin-card">
+      <div className="admin-card-header">
+        <div>
+          <h2>Футер</h2>
+          <p>
+            Добавьте ссылки на социальные сети. Пустое поле оставит кнопку
+            видимой, но отключит переход.
+          </p>
+        </div>
+
+        <button
+          className="admin-button admin-button-light"
+          type="button"
+          onClick={onBack}
+        >
+          <FiArrowLeft />
+          Назад
+        </button>
+      </div>
+
+      {loading ? (
+        <p className="footer-settings-status">Загрузка настроек...</p>
+      ) : (
+        <form className="seo-form footer-settings-form" onSubmit={handleSubmit}>
+          <div className="seo-form-grid">
+            <label>
+              Instagram
+              <input
+                type="text"
+                value={form.instagram_url}
+                placeholder="https://instagram.com/chondo.group"
+                onChange={(event) =>
+                  changeField("instagram_url", event.target.value)
+                }
+              />
+              <small>Можно вставить полную ссылку или @username.</small>
+            </label>
+
+            <label>
+              Telegram
+              <input
+                type="text"
+                value={form.telegram_url}
+                placeholder="https://t.me/chondo_group"
+                onChange={(event) =>
+                  changeField("telegram_url", event.target.value)
+                }
+              />
+              <small>Можно вставить полную ссылку или @username.</small>
+            </label>
+
+            <label>
+              WhatsApp
+              <input
+                type="text"
+                value={form.whatsapp_url}
+                placeholder="+7 700 000 00 00 или https://wa.me/77000000000"
+                onChange={(event) =>
+                  changeField("whatsapp_url", event.target.value)
+                }
+              />
+              <small>Номер автоматически преобразуется в ссылку WhatsApp.</small>
+            </label>
+          </div>
+
+          <div className="footer-settings-actions">
+            <button className="admin-button" type="submit" disabled={saving}>
+              <FiSave />
+              {saving ? "Сохранение..." : "Сохранить ссылки"}
+            </button>
+          </div>
+        </form>
+      )}
+
+      {message && <p className="logo-manager-message">{message}</p>}
+    </section>
+  );
+}
+
+
 function BlocksPage() {
   const [activeBlock, setActiveBlock] = useState(null);
 
@@ -413,6 +578,10 @@ function BlocksPage() {
 
   if (activeBlock === "cases") {
     return <CasesManager onBack={() => setActiveBlock(null)} />;
+  }
+
+  if (activeBlock === "footer") {
+    return <FooterSettingsBlock onBack={() => setActiveBlock(null)} />;
   }
 
   if (activeBlock) {

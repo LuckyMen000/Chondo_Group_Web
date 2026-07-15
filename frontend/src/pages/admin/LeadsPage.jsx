@@ -34,7 +34,6 @@ function LeadsPage() {
     return leads.map((lead) => ({
       ID: lead.id,
       Имя: lead.name || "—",
-      Email: lead.email || "—",
       Телефон: lead.phone || "—",
       Сообщение: lead.message || "—",
       Дата: formatDate(lead.created_at),
@@ -58,7 +57,6 @@ function LeadsPage() {
     const headers = Object.keys(rows[0] || {
       ID: "",
       Имя: "",
-      Email: "",
       Телефон: "",
       Сообщение: "",
       Дата: "",
@@ -146,7 +144,6 @@ function LeadsPage() {
               <tr>
                 <th>ID</th>
                 <th>Имя</th>
-                <th>Email</th>
                 <th>Телефон</th>
                 <th>Сообщение</th>
                 <th>Дата</th>
@@ -158,7 +155,6 @@ function LeadsPage() {
                 <tr key={lead.id}>
                   <td>{lead.id}</td>
                   <td>{lead.name || "—"}</td>
-                  <td>{lead.email || "—"}</td>
                   <td>{lead.phone || "—"}</td>
                   <td>{lead.message || "—"}</td>
                   <td>{formatDate(lead.created_at)}</td>

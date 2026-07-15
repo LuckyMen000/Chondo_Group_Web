@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+import { API_ROOT_URL } from "./config";
 
 function getToken() {
   return localStorage.getItem("admin_token");
@@ -18,7 +18,7 @@ async function request(path, options = {}) {
     }
   }
 
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`${API_ROOT_URL}${path}`, {
     ...options,
     headers
   });

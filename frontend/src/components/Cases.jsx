@@ -10,15 +10,23 @@ const categories = [
   },
   {
     id: "digital",
-    title: "Digital реклама"
+    title: "Digital Marketing"
   },
   {
     id: "experts",
-    title: "Продюсирование экспертов + системные воронки"
+    title: "Продвижение экспертов"
+  },
+  {
+    id: "funnels",
+    title: "Автоворонки"
+  },
+  {
+    id: "uxui",
+    title: "UX/UI"
   },
   {
     id: "podcasts",
-    title: "Подкасты"
+    title: "Видеопродакшн и подкасты"
   }
 ];
 
@@ -91,7 +99,11 @@ function Cases() {
       <div className="container">
         <div className="cases-showcase-head">
           <p className="eyebrow">Кейсы</p>
-          <h2>Примеры решений</h2>
+          <h2>Результаты, которые можно проверить</h2>
+          <p className="cases-showcase-intro">
+            Показываем не только готовый визуал, но и бизнес-результат: заявки,
+            автоматизированные процессы и рост ключевых показателей.
+          </p>
         </div>
 
         <div className="cases-tabs" role="tablist" aria-label="Рубрики кейсов">

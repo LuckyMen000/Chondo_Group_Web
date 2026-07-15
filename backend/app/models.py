@@ -9,7 +9,8 @@ class Lead(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False)
-    email = Column(String(255), nullable=False)
+    # Legacy field: the public form no longer collects email.
+    email = Column(String(255), nullable=True, default="")
     phone = Column(String(50), nullable=False)
     message = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -169,6 +170,20 @@ class ProjectCase(Base):
     sort_order = Column(Integer, nullable=False, default=0)
     is_active = Column(Boolean, nullable=False, default=True)
 
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now()
+    )
+
+class FooterSettings(Base):
+    __tablename__ = "footer_settings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    instagram_url = Column(String(1000), nullable=True)
+    telegram_url = Column(String(1000), nullable=True)
+    whatsapp_url = Column(String(1000), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(
         DateTime(timezone=True),

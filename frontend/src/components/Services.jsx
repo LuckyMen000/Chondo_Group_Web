@@ -1,40 +1,31 @@
-const services = [
-  {
-    title: "Development",
-    text: "Разрабатываем сайты, платформы, личные кабинеты и веб-приложения под задачи бизнеса.",
-  },
-  {
-    title: "CRM Systems",
-    text: "Проектируем и внедряем CRM-системы, админ-панели, реестры заявок и внутренние сервисы.",
-  },
-  {
-    title: "UI/UX Design",
-    text: "Создаём понятные интерфейсы, которые помогают пользователю быстро дойти до нужного действия.",
-  },
-  {
-    title: "Automation",
-    text: "Автоматизируем заявки, уведомления, отчёты, интеграции и повторяющиеся бизнес-процессы.",
-  },
-  {
-    title: "Analytics",
-    text: "Подключаем аналитику, события, цели, отчёты и понятные дашборды для принятия решений.",
-  },
-];
+import { Link } from "react-router-dom";
+
+import { services } from "../data/services";
 
 function Services() {
   return (
     <section className="section section-dark" id="services">
       <div className="container">
-        <p className="eyebrow">услуги</p>
-        <h2>Что мы делаем</h2>
+        <p className="eyebrow">Услуги</p>
+        <h2>Шесть направлений — одна система роста</h2>
+        <p className="section-intro">
+          Подключаем отдельное направление или собираем комплексное решение
+          под задачи бизнеса.
+        </p>
 
         <div className="cards services-grid">
           {services.map((service) => (
-            <article className="card service-card" key={service.title}>
-              <span className="service-card__number">/ {service.title}</span>
+            <Link
+              className="card service-card service-card-link"
+              key={service.slug}
+              to={`/services/${service.slug}`}
+              aria-label={`Подробнее об услуге «${service.title}»`}
+            >
+              <span className="service-card__number">/ {service.label}</span>
               <h3>{service.title}</h3>
-              <p>{service.text}</p>
-            </article>
+              <p>{service.cardText}</p>
+              <span className="service-card__more">Подробнее →</span>
+            </Link>
           ))}
         </div>
       </div>

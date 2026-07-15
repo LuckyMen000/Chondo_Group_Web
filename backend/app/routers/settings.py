@@ -72,24 +72,19 @@ def get_or_create_global_settings(db: Session):
 
 
 def seed_default_pages(db: Session):
-    existing_count = db.query(SeoPage).count()
-
-    if existing_count > 0:
-        return
-
     default_pages = [
         {
             "page_name": "Главная",
             "path": "/",
-            "h1": "Chondo Group",
-            "title": "Chondo Group — строительная компания",
-            "description": "Строительная компания Chondo Group. Реализуем проекты, ремонт и строительные работы под ключ.",
-            "focus_keyword": "строительная компания",
-            "keywords": "строительство, ремонт, chondo, chondo group",
+            "h1": "Медиа, маркетинг и IT-системы, которые приводят клиентов",
+            "title": "Chondo Group — продюсерский центр, маркетинг и разработка",
+            "description": "Создаём видеоконтент, запускаем digital-маркетинг, выстраиваем автоворонки и разрабатываем сайты, CRM и цифровые продукты для бизнеса.",
+            "focus_keyword": "продюсерский центр Chondo Group",
+            "keywords": "продюсерский центр, digital marketing, видеопродакшн, разработка сайтов, CRM, автоворонки, Chondo Group",
             "canonical_url": "https://chondo.kz",
             "robots": "index, follow",
-            "og_title": "Chondo Group",
-            "og_description": "Строительная компания Chondo Group.",
+            "og_title": "Chondo Group — медиа, маркетинг и IT",
+            "og_description": "Контент, реклама, автоворонки и цифровые продукты в одной команде.",
             "og_image": "",
             "sitemap_priority": 1.0,
             "sitemap_changefreq": "weekly"
@@ -97,11 +92,11 @@ def seed_default_pages(db: Session):
         {
             "page_name": "О компании",
             "path": "/about",
-            "h1": "О компании",
+            "h1": "О Chondo Group",
             "title": "О компании — Chondo Group",
-            "description": "Информация о компании Chondo Group, опыте, подходе и реализованных проектах.",
+            "description": "Chondo Group объединяет продакшн, маркетинг, дизайн и разработку в единую систему роста бизнеса.",
             "focus_keyword": "о компании Chondo Group",
-            "keywords": "о компании, chondo group",
+            "keywords": "Chondo Group, продюсерский центр, маркетинг, разработка, видеопродакшн",
             "canonical_url": "https://chondo.kz/about",
             "robots": "index, follow",
             "sitemap_priority": 0.8,
@@ -110,37 +105,115 @@ def seed_default_pages(db: Session):
         {
             "page_name": "Услуги",
             "path": "/services",
-            "h1": "Услуги",
+            "h1": "Услуги Chondo Group",
             "title": "Услуги — Chondo Group",
-            "description": "Услуги компании Chondo Group: строительство, ремонт, проектные и подрядные работы.",
-            "focus_keyword": "строительные услуги",
-            "keywords": "строительные услуги, ремонт, подрядные работы",
+            "description": "Разработка, digital marketing, продвижение экспертов, автоворонки, UX/UI и видеопродакшн для бизнеса.",
+            "focus_keyword": "услуги Chondo Group",
+            "keywords": "разработка, digital marketing, продвижение экспертов, автоворонки, UX UI, видеопродакшн",
             "canonical_url": "https://chondo.kz/services",
             "robots": "index, follow",
             "sitemap_priority": 0.9,
             "sitemap_changefreq": "monthly"
         },
         {
+            "page_name": "Разработка",
+            "path": "/services/development",
+            "h1": "Разработка сайтов, CRM и цифровых продуктов",
+            "title": "Разработка сайтов и CRM — Chondo Group",
+            "description": "Проектируем и разрабатываем сайты, CRM, личные кабинеты, внутренние системы и интеграции для бизнеса.",
+            "focus_keyword": "разработка сайтов и CRM",
+            "keywords": "разработка сайтов, CRM, личный кабинет, внутренние системы, Chondo Group",
+            "canonical_url": "https://chondo.kz/services/development",
+            "robots": "index, follow",
+            "sitemap_priority": 0.8,
+            "sitemap_changefreq": "monthly"
+        },
+        {
+            "page_name": "Digital Marketing",
+            "path": "/services/digital-marketing",
+            "h1": "Digital-маркетинг для бизнеса",
+            "title": "Digital Marketing и реклама — Chondo Group",
+            "description": "Стратегия, рекламные кампании, креативы и аналитика с фокусом на стоимость заявки и продажи.",
+            "focus_keyword": "digital marketing Казахстан",
+            "keywords": "digital marketing, таргетированная реклама, Meta Ads, Google Ads, аналитика",
+            "canonical_url": "https://chondo.kz/services/digital-marketing",
+            "robots": "index, follow",
+            "sitemap_priority": 0.8,
+            "sitemap_changefreq": "monthly"
+        },
+        {
+            "page_name": "Продвижение экспертов",
+            "path": "/services/expert-promotion",
+            "h1": "Продвижение и запуск экспертов",
+            "title": "Продвижение экспертов — Chondo Group",
+            "description": "Позиционирование, контент, запуски, реклама и автоворонки для экспертов и образовательных продуктов.",
+            "focus_keyword": "продвижение экспертов",
+            "keywords": "продвижение экспертов, личный бренд, запуск курса, контент, продюсирование",
+            "canonical_url": "https://chondo.kz/services/expert-promotion",
+            "robots": "index, follow",
+            "sitemap_priority": 0.8,
+            "sitemap_changefreq": "monthly"
+        },
+        {
+            "page_name": "Автоворонки",
+            "path": "/services/funnels",
+            "h1": "Автоворонки и автоматизация продаж",
+            "title": "Автоворонки и боты — Chondo Group",
+            "description": "Проектируем автоворонки, Telegram-ботов, WhatsApp-коммуникации и CRM-интеграции для обработки и прогрева лидов.",
+            "focus_keyword": "автоворонки для бизнеса",
+            "keywords": "автоворонки, Telegram бот, WhatsApp, CRM интеграция, автоматизация продаж",
+            "canonical_url": "https://chondo.kz/services/funnels",
+            "robots": "index, follow",
+            "sitemap_priority": 0.8,
+            "sitemap_changefreq": "monthly"
+        },
+        {
+            "page_name": "UX/UI-дизайн",
+            "path": "/services/ux-ui",
+            "h1": "UX/UI-дизайн сайтов и цифровых продуктов",
+            "title": "UX/UI-дизайн — Chondo Group",
+            "description": "UX-аудит, прототипирование, дизайн сайтов, CRM, личных кабинетов и дизайн-систем.",
+            "focus_keyword": "UX UI дизайн",
+            "keywords": "UX UI дизайн, прототип, дизайн сайта, интерфейс, дизайн-система",
+            "canonical_url": "https://chondo.kz/services/ux-ui",
+            "robots": "index, follow",
+            "sitemap_priority": 0.8,
+            "sitemap_changefreq": "monthly"
+        },
+        {
+            "page_name": "Видеопродакшн и подкасты",
+            "path": "/services/production",
+            "h1": "Видеопродакшн и подкасты",
+            "title": "Видеопродакшн и подкасты — Chondo Group",
+            "description": "Создаём подкасты, интервью, рекламные ролики, Reels и Shorts: концепция, съёмка, монтаж и адаптация контента.",
+            "focus_keyword": "видеопродакшн Астана",
+            "keywords": "видеопродакшн, подкасты, видеосъёмка, интервью, Reels, Shorts",
+            "canonical_url": "https://chondo.kz/services/production",
+            "robots": "index, follow",
+            "sitemap_priority": 0.8,
+            "sitemap_changefreq": "monthly"
+        },
+        {
             "page_name": "Кейсы",
             "path": "/cases",
-            "h1": "Кейсы",
+            "h1": "Кейсы Chondo Group",
             "title": "Кейсы — Chondo Group",
-            "description": "Примеры выполненных проектов и кейсов компании Chondo Group.",
-            "focus_keyword": "кейсы строительства",
-            "keywords": "кейсы, проекты, строительство",
+            "description": "Результаты проектов Chondo Group в разработке, маркетинге, продвижении, автоматизации и видеопродакшне.",
+            "focus_keyword": "кейсы Chondo Group",
+            "keywords": "кейсы, разработка, маркетинг, CRM, автоворонки, продакшн",
             "canonical_url": "https://chondo.kz/cases",
             "robots": "index, follow",
-            "sitemap_priority": 0.7,
+            "sitemap_priority": 0.8,
             "sitemap_changefreq": "monthly"
         },
         {
             "page_name": "Контакты",
             "path": "/contacts",
-            "h1": "Контакты",
+            "h1": "Обсудить проект",
             "title": "Контакты — Chondo Group",
-            "description": "Свяжитесь с Chondo Group для консультации по строительным и ремонтным работам.",
+            "description": "Свяжитесь с Chondo Group, чтобы обсудить разработку, маркетинг, автоворонку, продвижение или видеопродакшн.",
             "focus_keyword": "контакты Chondo Group",
-            "keywords": "контакты, chondo group",
+            "keywords": "контакты, Chondo Group, обсудить проект",
             "canonical_url": "https://chondo.kz/contacts",
             "robots": "index, follow",
             "sitemap_priority": 0.7,
@@ -148,11 +221,46 @@ def seed_default_pages(db: Session):
         }
     ]
 
-    for page_data in default_pages:
-        page = SeoPage(**page_data)
-        db.add(page)
+    legacy_markers = (
+        "строитель",
+        "ремонт",
+        "подрядн"
+    )
 
-    db.commit()
+    existing_pages = {
+        page.path: page
+        for page in db.query(SeoPage).all()
+    }
+
+    changed = False
+
+    for page_data in default_pages:
+        existing_page = existing_pages.get(page_data["path"])
+
+        if not existing_page:
+            db.add(SeoPage(**page_data))
+            changed = True
+            continue
+
+        legacy_text = " ".join(
+            filter(
+                None,
+                [
+                    existing_page.title,
+                    existing_page.description,
+                    existing_page.focus_keyword,
+                    existing_page.keywords
+                ]
+            )
+        ).lower()
+
+        if any(marker in legacy_text for marker in legacy_markers):
+            for field, value in page_data.items():
+                setattr(existing_page, field, value)
+            changed = True
+
+    if changed:
+        db.commit()
 
 
 def get_page_by_path(db: Session, path: str):
@@ -174,9 +282,9 @@ def get_home_page(db: Session):
     page = SeoPage(
         page_name="Главная",
         path="/",
-        h1="Chondo Group",
-        title="Chondo Group — строительная компания",
-        description="Строительная компания Chondo Group.",
+        h1="Медиа, маркетинг и IT-системы, которые приводят клиентов",
+        title="Chondo Group — продюсерский центр, маркетинг и разработка",
+        description="Создаём контент, запускаем маркетинг, выстраиваем автоворонки и разрабатываем цифровые продукты.",
         canonical_url="https://chondo.kz",
         robots="index, follow",
         sitemap_priority=1.0

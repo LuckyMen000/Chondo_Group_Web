@@ -132,14 +132,17 @@ function buildSchema(page, globalSettings) {
 }
 
 function applySeo(data, pathname) {
+  const hasPage = Boolean(data?.page);
   const page = data?.page || {};
   const globalSettings = data?.global_settings || {};
 
   const siteName = globalSettings.default_site_name || "Chondo Group";
   const siteUrl = globalSettings.site_url || window.location.origin;
 
-  const title = page.title || siteName;
-  const description = page.description || "";
+  const title = hasPage
+    ? page.title || siteName
+    : `Страница не найдена — ${siteName}`;
+  const description = hasPage ? page.description || "" : "";
   const canonicalUrl =
     page.canonical_url ||
     `${siteUrl.replace(/\/$/, "")}${pathname === "/" ? "" : pathname}`;
@@ -148,7 +151,10 @@ function applySeo(data, pathname) {
 
   setMetaTag("description", description);
   setMetaTag("keywords", page.keywords || "");
-  setMetaTag("robots", page.robots || "index, follow");
+  setMetaTag(
+    "robots",
+    hasPage ? page.robots || "index, follow" : "noindex, nofollow"
+  );
 
   setPropertyMetaTag("og:title", page.og_title || title);
   setPropertyMetaTag("og:description", page.og_description || description);
@@ -176,7 +182,7 @@ function applySeo(data, pathname) {
 
   setCanonical(canonicalUrl);
 
-  const schema = buildSchema(page, globalSettings);
+  const schema = hasPage ? buildSchema(page, globalSettings) : null;
   setJsonLd(schema);
 }
 

@@ -536,7 +536,7 @@ function SeoSettingsPage() {
                 name="title"
                 value={form.title}
                 onChange={handlePageChange}
-                placeholder="Chondo Group — строительная компания"
+                placeholder="Chondo Group — продюсерский центр, маркетинг и разработка"
               />
             </label>
 
@@ -563,7 +563,7 @@ function SeoSettingsPage() {
                   name="focus_keyword"
                   value={form.focus_keyword}
                   onChange={handlePageChange}
-                  placeholder="строительная компания"
+                  placeholder="продюсерский центр Chondo Group"
                 />
               </label>
 

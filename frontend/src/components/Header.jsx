@@ -1,21 +1,28 @@
+import { Link, useLocation } from "react-router-dom";
+
 function Header() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  const sectionLink = (hash) => (isHome ? hash : `/${hash}`);
+
   return (
     <header className="header">
       <div className="container header__inner">
-        <a href="#hero" className="logo">
+        <Link to="/" className="logo">
           Chondo Group
-        </a>
+        </Link>
 
-        <nav className="nav">
-          <a href="#about">о нас</a>
-          <a href="#services">услуги</a>
-          <a href="#cases">кейсы</a>
-          <a href="#contact">контакты</a>
+        <nav className="nav" aria-label="Основная навигация">
+          <Link to={sectionLink("#about")}>О нас</Link>
+          <Link to={sectionLink("#services")}>Услуги</Link>
+          <Link to={sectionLink("#cases")}>Кейсы</Link>
+          <Link to={sectionLink("#contact")}>Контакты</Link>
         </nav>
 
-        <a href="#contact" className="header__button">
-          обсудить проект
-        </a>
+        <Link to={sectionLink("#contact")} className="header__button">
+          Обсудить проект
+        </Link>
       </div>
     </header>
   );

@@ -20,7 +20,8 @@ router = APIRouter(
 def create_lead(lead_data: LeadCreate, db: Session = Depends(get_db)):
     lead = Lead(
         name=lead_data.name,
-        email=lead_data.email,
+        # Legacy column is kept for compatibility with existing databases.
+        email="",
         phone=lead_data.phone,
         message=lead_data.message
     )

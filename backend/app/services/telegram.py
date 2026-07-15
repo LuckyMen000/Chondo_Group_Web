@@ -114,7 +114,6 @@ def format_new_lead_message(lead: Any) -> str:
             "",
             f"🆔 <b>ID:</b> {_escape(lead.id)}",
             f"👤 <b>Имя:</b> {_escape(lead.name)}",
-            f"📧 <b>Email:</b> {_escape(lead.email)}",
             f"📞 <b>Телефон:</b> {_escape(lead.phone)}",
             f"💬 <b>Сообщение:</b> {_escape(lead.message)}",
             f"🕒 <b>Дата:</b> {_escape(_format_datetime(lead.created_at))}",
